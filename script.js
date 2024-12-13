@@ -2,8 +2,8 @@
 Bootstrap scopes the :invalid and :valid styles to parent .was-validated class, usually applied to the <form>. Otherwise, any required field without a value shows up as invalid on 
 page load. This way, you may choose when to activate them (typically after form submission is attempted).
 
-Esto lo he sacado de la documentación de Bootstrap (https://getbootstrap.com/docs/5.3/forms/validation/#server-side), predeterminado, bootstrap pone la etiqueta a invalid si no tiene clase,
-por eso en mi código constantemente al validar las cosas, les doy la clase is-valid , para que dinámicamente se vea en verde o en rojo dependiendo de si cumple la validación
+Esto lo he sacado de la documentación de Bootstrap (https://getbootstrap.com/docs/5.3/forms/validation/#how-it-works), predeterminado, bootstrap pone la etiqueta a invalid si no tiene clase,
+por eso en mi código constantemente al validar las cosas, les doy la clase is-valid y hago un remove de la clase is-invalid (LINEA 214) , para que dinámicamente se vea en verde o en rojo dependiendo de si cumple la validación
 
 */
 // Constantes de validación
@@ -13,17 +13,22 @@ const FECHA_ACTUAL = new Date();
 const LONGITUD_CP = 5;
 
 // Expresiones regulares
+const REGEX_NOMBRE = /^[a-zA-Z\s]+$/;
 const REGEX_DNI = /^[0-9]{8}[A-Z]$/;
 const REGEX_MATRICULA = /^[0-9]{4}-[A-Z]{3}$/;
 const REGEX_JPG = /\.jpg$/;
+const REGEX_APELLIDO = /^[a-zA-Z\s]+$/
+const REGEX_CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const REGEX_CODIGOPOSTAL = /^\d{5}$/;
+const REGEX_TELEFONO = /^\d{9}$/;
 
 // Funciones de validación
 function validarNombre(nombre) {
-    return nombre.trim() !== '' && /^[a-zA-Z\s]+$/.test(nombre) && nombre.length <= LONGITUD_NOMBRE;
+    return nombre.trim() !== '' && REGEX_NOMBRE.test(nombre) && nombre.length <= LONGITUD_NOMBRE;
 }
 
 function validarApellidos(apellidos) {
-    return apellidos.trim() !== '' && /^[a-zA-Z\s]+$/.test(apellidos) && apellidos.length <= LONGITUD_NOMBRE;
+    return apellidos.trim() !== '' && REGEX_APELLIDO.test(apellidos) && apellidos.length <= LONGITUD_NOMBRE;
 }
 
 function validarDNI(dni) {
@@ -31,15 +36,15 @@ function validarDNI(dni) {
 }
 
 function validarCorreo(correo) {
-    return correo.trim() !== '' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
+    return correo.trim() !== '' && REGEX_CORREO.test(correo);
 }
 
 function validarTelefono(telefono) {
-    return telefono.trim() !== '' && /^\d{9}$/.test(telefono);
+    return telefono.trim() !== '' && REGEX_TELEFONO.test(telefono);
 }
 
 function validarCodigoPostal(codigoPostal) {
-    return codigoPostal.trim() !== '' && /^\d{5}$/.test(codigoPostal);
+    return codigoPostal.trim() !== '' && REGEX_CODIGOPOSTAL.test(codigoPostal);
 }
 
 function validarFecha(fecha) {
@@ -108,7 +113,7 @@ function calcularSeguro(datos) {
             precioBase = 1000;
             break;
         default:
-            precioBase = 500; // Valor por defecto
+            precioBase = 500; 
     }
 
     // Penalizaciones y descuentos
@@ -287,6 +292,73 @@ marcaSelect.addEventListener('change', () => {
   }
   }
 );
+// Modifica la función para incluir la foto JPG
+function crearTarjetas(datosUsuario) {
+  const contenedorTarjetas = document.getElementById('resultado');
+  contenedorTarjetas.innerHTML = ''; // Limpiar tarjetas existentes
+
+  const tiposDeSeguros = ['terceros', 'terceros_ampliado', 'con_franquicia', 'todo_riesgo'];
+
+  // Obtener la foto JPG recibida por el formulario
+  const archivoCarnet = document.getElementById('foto_carnet').files[0];
+  
+  // Crear una variable para la imagen HTML
+  let imagenHTML = '';
+
+  // Si hay una imagen JPG seleccionada, usar URL.createObjectURL para generar una URL temporal
+  if (archivoCarnet) {
+      const imagenURL = URL.createObjectURL(archivoCarnet);  // Crear URL temporal para la imagen
+      console.log("Imagen cargada:", imagenURL);  // Verifica la URL de la imagen
+      // Usar la imagen URL en la tarjeta
+      imagenHTML = `<img src="${imagenURL}" alt="Foto del carnet" style="max-width: 100%; max-height: 200px; margin-bottom: 15px;">`;
+  }
+
+  // Iterar sobre los tipos de seguro y crear tarjetas
+  tiposDeSeguros.forEach((tipo) => {
+      const datosConTipo = { ...datosUsuario, tipoSeguro: tipo }; // Copia todas las propiedades existentes del objeto datosUsuario
+      const precioFinal = calcularSeguro(datosConTipo);
+
+      const tarjeta = document.createElement('div');
+      tarjeta.className = `card mb-3 border-secondary`;
+
+      // Obtener el tipo de seguro seleccionado en el formulario
+      const tipoSeguroSeleccionado = document.getElementById('tipo_seguro').value;
+
+      // Si el tipo de seguro seleccionado coincide con el tipo de la tarjeta, aplicar la clase 'cartaSeleccionada'
+      if (tipoSeguroSeleccionado === tipo) {
+          tarjeta.classList.add('cartaSeleccionada');
+      }
+
+      // Contenido de la tarjeta, incluyendo la imagen si se cargó
+      tarjeta.innerHTML = `
+          <div class="card-body">
+              <h5 class="card-title">${tipo.replace('_', ' ').toUpperCase()}</h5>
+              ${imagenHTML}  <!-- Aquí se agrega la foto del carnet si está presente -->
+              <p class="card-text"><strong>Precio: ${precioFinal.toFixed(2)} €</strong></p>
+              <button type="button" class="btn btn-outline-secondary btn-contratar">Contratar</button>
+              <button type="button" class="btn btn-outline-danger btn-descartar">Descartar</button>
+          </div>
+      `;
+
+      // Añadir eventos para los botones
+      const botonContratar = tarjeta.querySelector('.btn-contratar');
+      const botonDescartar = tarjeta.querySelector('.btn-descartar');
+
+      botonContratar.addEventListener('click', () => {
+          alert(`Gracias por contratar. Atentamente tu asesor de seguros ${datosUsuario.nombre} ${datosUsuario.apellidos}`);
+      });
+
+      botonDescartar.addEventListener('click', () => {
+          tarjeta.remove(); // Elimina la tarjeta del DOM
+      });
+
+      // Añadir la tarjeta al contenedor
+      contenedorTarjetas.appendChild(tarjeta);
+  });
+}
+
+
+
 
 // --- Función para manejar el cambio de modelo ---
 modeloSelect.addEventListener('change', () => {
@@ -332,8 +404,9 @@ modeloSelect.addEventListener('change', () => {
       };
 
         // Verificación si todos los campos son válidos
-        const formIsValid = form.querySelectorAll('.is-invalid').length === 0;
-
+        const formIsValid = form.querySelectorAll('.is-invalid').length === 0; 
+        // si algun input por lo que sea esté en rojo (is-invalid) nunca entrará al IF y nos mostrará que completemos los campos, lo mismo con el checkbox
+        console.log(datos);
         if (formIsValid) {
             const checkboxTerminos = document.getElementById('terminos');
             
@@ -343,11 +416,13 @@ modeloSelect.addEventListener('change', () => {
             } else {
                 // Si el formulario y el checkbox son válidos, calcular el seguro
                 const precioSeguro = calcularSeguro(datos);
-                document.getElementById('resultado').innerHTML = `El precio del seguro es: ${precioSeguro.toFixed(2)} €`;
+                crearTarjetas(datos);
             }
         } else {
             alert('Por favor, complete correctamente todos los campos.');
         }
 
   });
+  
 });
+
