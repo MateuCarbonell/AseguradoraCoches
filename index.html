@@ -29,6 +29,11 @@
             font-size: 1.2em;
             color: #007bff;
         }
+        .cartaSeleccionada{
+            background: red;
+            background-color: red;
+            text-shadow: 10px;
+        }
     </style>
 </head>
 <body>
@@ -41,46 +46,46 @@
                         <!-- Campos del formulario -->
                         <div class="form-group">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" class="form-control" >
+                            <input type="text" id="nombre" name="nombre" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="apellidos">Apellidos:</label>
-                            <input type="text" id="apellidos" name="apellidos" class="form-control" >
+                            <input type="text" id="apellidos" name="apellidos" class="form-control" required >
                         </div>
                         <div class="form-group">
                             <label for="dni">DNI:</label>
-                            <input type="text" id="dni" name="dni" class="form-control" >
+                            <input type="text" id="dni" name="dni" class="form-control" required >
                         </div>
                         <div class="form-group">
                             <label for="correo">Correo Electrónico:</label>
-                            <input type="email" id="correo" name="correo" class="form-control" >
+                            <input type="email" id="correo" name="correo" class="form-control" required>
                         </div>
                         <!-- Números -->
                         <div class="form-group">
                             <label for="telefono">Teléfono:</label>
-                            <input type="tel" id="telefono" name="telefono" class="form-control" >
+                            <input type="tel" id="telefono" name="telefono" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="codigo_postal">Código Postal:</label>
-                            <input type="number" id="codigo_postal" name="codigo_postal" class="form-control" >
+                            <input type="number" id="codigo_postal" name="codigo_postal" class="form-control" required >
                         </div>
                         <!-- Fechas -->
                         <div class="form-group">
                             <label for="fecha_carnet">Fecha Carné de Conducir:</label>
-                            <input type="date" id="fecha_carnet" name="fecha_carnet" class="form-control" >
+                            <input type="date" id="fecha_carnet" name="fecha_carnet" class="form-control" required >
                         </div>
                         <div class="form-group">
                             <label for="fecha_matriculacion">Fecha Matriculación:</label>
-                            <input type="date" id="fecha_matriculacion" name="fecha_matriculacion" class="form-control" >
+                            <input type="date" id="fecha_matriculacion" name="fecha_matriculacion" class="form-control" required >
                         </div>
                         <div class="form-group">
                             <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-                            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" >
+                            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control"required >
                         </div>
                         <!-- Selectores -->
                         <div class="form-group">
                             <label for="sexo">Sexo:</label>
-                            <select id="sexo" name="sexo" class="form-control" >
+                            <select id="sexo" name="sexo" class="form-control" required >
                                 <option value="">Selecciona el sexo </option>
                                 <option value="hombre">Hombre</option>
                                 <option value="mujer">Mujer</option>
@@ -88,7 +93,7 @@
                         </div>
                         <div class="form-group">
                             <label for="comunidad">Comunidad:</label>
-                            <select id="comunidad" name="comunidad" class="form-control" >
+                            <select id="comunidad" name="comunidad" class="form-control" required >
                                 <option value="">Seleccione una Comunidad</option>
                                 <option value="Andalucia">Andalucia</option>
                                 <option value="Madrid">Madrid</option>
@@ -97,13 +102,13 @@
                         </div>
                         <div class="form-group">
                             <label for="provincia">Provincia:</label>
-                            <select id="provincia" name="provincia" class="form-control" >
+                            <select id="provincia" name="provincia" class="form-control" required>
                                 <option value="">Seleccione una Provincia</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="marca">Marca:</label>
-                            <select id="marca" name="marca" class="form-control" >
+                            <select id="marca" name="marca" class="form-control" required >
                                 <option value="">Seleccione una Marca</option>
                                 <option value="audi">Audi</option>
                                 <option value="bmw">BMW</option>
@@ -112,13 +117,13 @@
                         </div>
                         <div class="form-group">
                             <label for="modelo">Modelo:</label>
-                            <select id="modelo" name="modelo" class="form-control" >
+                            <select id="modelo" name="modelo" class="form-control" required >
                                 <option value="">Seleccione un Modelo</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="tipo_seguro">Tipo de Seguro:</label>
-                            <select id="tipo_seguro" name="tipo_seguro" class="form-control" >
+                            <select id="tipo_seguro" name="tipo_seguro" class="form-control" required >
                                 <option value="">Seleccione un tipo de seguro</option>
                                 <option value="terceros">Terceros</option>
                                 <option value="terceros_ampliado">Terceros Ampliado</option>
@@ -128,7 +133,7 @@
                         </div>
                         <div class="form-group">
                             <label for="tipo_vehiculo">Tipo de Vehículo:</label>
-                            <select id="tipo_vehiculo" name="tipo_vehiculo" class="form-control" >
+                            <select id="tipo_vehiculo" name="tipo_vehiculo" class="form-control" required >
                                 <option value="">Seleccione un tipo de vehículo</option>
                                 <option value="diesel">Diesel</option>
                                 <option value="gasolina">Gasolina</option>
@@ -138,10 +143,10 @@
                         </div>
                         <div class="form-group">
                             <label for="foto_carnet">Subir Foto del Carné de Conducir (JPG):</label>
-                            <input type="file" id="foto_carnet" name="foto_carnet" accept="image/jpeg" class="form-control">
+                            <input type="file" id="foto_carnet" name="foto_carnet" accept="image/jpeg" class="form-control" required>
                         </div>
                         <div class="form-group form-check">
-                            <input type="checkbox" id="terminos" name="terminos" class="terminos" >
+                            <input type="checkbox" id="terminos" name="terminos" class="terminos" required >
                             <label for="terminos" class="terminos">Acepto los términos y condiciones</label>
                         </div>
                         <button type="submit" class="btn btn-primary">Enviar</button>
