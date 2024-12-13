@@ -1,3 +1,11 @@
+/*
+Bootstrap scopes the :invalid and :valid styles to parent .was-validated class, usually applied to the <form>. Otherwise, any required field without a value shows up as invalid on 
+page load. This way, you may choose when to activate them (typically after form submission is attempted).
+
+Esto lo he sacado de la documentación de Bootstrap (https://getbootstrap.com/docs/5.3/forms/validation/#server-side), predeterminado, bootstrap pone la etiqueta a invalid si no tiene clase,
+por eso en mi código constantemente al validar las cosas, les doy la clase is-valid , para que dinámicamente se vea en verde o en rojo dependiendo de si cumple la validación
+
+*/
 // Constantes de validación
 const LONGITUD_NOMBRE = 30;
 const EDAD_MINIMA = 18;
