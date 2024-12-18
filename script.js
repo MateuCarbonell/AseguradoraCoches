@@ -365,7 +365,7 @@ function crearTarjetas(datosUsuario) {
       const botonDescartar = tarjeta.querySelector('.btn-descartar');
 
       botonContratar.addEventListener('click', () => {
-          alert(`Gracias por contratar el seguro ${tipo}. Atentamente tu asesor de seguros ${datosUsuario.nombre} ${datosUsuario.apellidos}`);
+          alert(`Gracias por contratar el seguro ${tipo}. Atentamente tu asesor de seguros Mateu Carbonell`);
       });
 
       botonDescartar.addEventListener('click', () => {
