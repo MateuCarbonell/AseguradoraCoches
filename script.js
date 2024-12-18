@@ -23,6 +23,7 @@ const REGEX_CODIGOPOSTAL = /^\d{5}$/;
 const REGEX_TELEFONO = /^\d{9}$/;
 
 // Funciones de validación
+
 function validarNombre(nombre) {
     return nombre.trim() !== '' && REGEX_NOMBRE.test(nombre) && nombre.length <= LONGITUD_NOMBRE;
 }
@@ -46,7 +47,7 @@ function validarTelefono(telefono) {
 function validarCodigoPostal(codigoPostal) {
     return codigoPostal.trim() !== '' && REGEX_CODIGOPOSTAL.test(codigoPostal);
 }
-
+// Función para validar fechas en el formato correcto (solo comparación con la fecha actual)
 function validarFecha(fecha) {
     return fecha.trim() !== '' && new Date(fecha) <= FECHA_ACTUAL;
 }
@@ -66,7 +67,6 @@ function validarArchivoJPG(archivo) {
 }
 
 function validarTipoSeguro(tipoSeguro) {
-  // Asegúrate de que el valor que pasa a esta función es válido
   return tipoSeguro === 'terceros' || tipoSeguro === 'terceros_ampliado' || tipoSeguro === 'con_franquicia' || tipoSeguro === 'todo_riesgo';
 }
 
@@ -77,7 +77,7 @@ function validarTipoVehiculo(tipoVehiculo){
 function validarSexo(sexo){
   return sexo === 'hombre' ||sexo === 'mujer';
 }
-
+// Función para calcular los años de antigüedad del permiso de conducir
 function calcularAñosPermiso(fechaCarnet) {
   const fechaEmision = new Date(fechaCarnet);
   const añoActual = new Date().getFullYear();
@@ -209,7 +209,8 @@ document.addEventListener('DOMContentLoaded', () => {
               break;
         }
 
-        // Mostrar feedback visual (por ejemplo, border color)
+        // Mostrar feedback visual, en este caso hago uso de estas dos clases de Bootstrap, para así ahorrarme crear una clase nueva y darle estilo
+        // la is-invalid pone borde rojo y una pequeña marca (x) y el is-valid borde verde y un tick (V)
         if (isValid) {
             input.classList.remove('is-invalid');
             input.classList.add('is-valid');
@@ -220,18 +221,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Selector dinámico de comunidades y provincias ---
-const comunidadesProvincias = {
-  Andalucia: ['Sevilla', 'Granada', 'Málaga', 'Córdoba'],
-  Cataluña: ['Barcelona', 'Girona', 'Tarragona', 'Lleida'],
-  Madrid: ['Madrid'],
-  Galicia: ['A Coruña', 'Lugo', 'Ourense', 'Pontevedra']
-};
-
-const marcasModelos = {
-  audi: ['A3', 'A4', 'Q5'],
-  bmw: ['Serie 1', 'Serie 3', 'X5'],
-  ford: ['Fiesta', 'Focus', 'Mondeo'],
-};
+    const comunidadesProvincias = {
+        Andalucia: ['Sevilla', 'Granada', 'Málaga', 'Córdoba', 'Almería', 'Jaén', 'Huelva', 'Cádiz'],
+        Aragon: ['Zaragoza', 'Huesca', 'Teruel'],
+        Asturias: ['Oviedo', 'Gijón', 'Avilés'],
+        Baleares: ['Palma de Mallorca', 'Ibiza', 'Menorca'],
+        Canarias: ['Tenerife', 'Gran Canaria', 'La Palma', 'Lanzarote', 'Fuerteventura'],
+        Cantabria: ['Santander', 'Torrelavega'],
+        CastillaLaMancha: ['Toledo', 'Ciudad Real', 'Albacete', 'Cuenca', 'Guadalajara'],
+        CastillaYLeon: ['Valladolid', 'León', 'Burgos', 'Salamanca', 'Segovia', 'Soria', 'Ávila', 'Palencia', 'Zamora'],
+        Cataluna: ['Barcelona', 'Girona', 'Tarragona', 'Lleida'],
+        Ceuta: ['Ceuta'],
+        Extremadura: ['Cáceres', 'Badajoz'],
+        Galicia: ['A Coruña', 'Lugo', 'Ourense', 'Pontevedra'],
+        Madrid: ['Madrid'],
+        Melilla: ['Melilla'],
+        Murcia: ['Murcia', 'Cartagena', 'Lorca'],
+        Navarra: ['Pamplona', 'Tudela'],
+        PaisVasco: ['Bilbao', 'San Sebastián', 'Vitoria'],
+        Rioja: ['Logroño'],
+        Valencia: ['Valencia', 'Alicante', 'Castellón']
+    };
+    
+    const marcasModelos = {
+        audi: ['A3', 'A4', 'Q5'],
+        bmw: ['Serie 1', 'Serie 3', 'X5'],
+        ford: ['Fiesta', 'Focus', 'Mondeo'],
+        mercedes: ['C-Class', 'E-Class', 'GLA'],
+        toyota: ['Corolla', 'RAV4', 'Yaris'],
+        volkswagen: ['Golf', 'Polo', 'Tiguan'],
+        nissan: ['Qashqai', 'Micra', 'Leaf']
+    };
 
 const comunidadSelect = document.getElementById('comunidad');
 const provinciaSelect = document.getElementById('provincia');
@@ -243,7 +263,7 @@ comunidadSelect.addEventListener('change', () => {
   const comunidadSeleccionada = comunidadSelect.value;
   provinciaSelect.innerHTML = '';  // Limpiar provincias antes de añadir nuevas opciones
 
-  console.log('Comunidad seleccionada:', comunidadSeleccionada);  // Verifica el valor de la comunidad
+//   console.log('Comunidad seleccionada:', comunidadSeleccionada);  
 
   // Validación para comunidad
   if (comunidadSeleccionada && comunidadesProvincias[comunidadSeleccionada]) {
@@ -302,7 +322,7 @@ function crearTarjetas(datosUsuario) {
   // Obtener la foto JPG recibida por el formulario
   const archivoCarnet = document.getElementById('foto_carnet').files[0];
   
-  // Crear una variable para la imagen HTML
+  //variable para la imagen HTML
   let imagenHTML = '';
 
   // Si hay una imagen JPG seleccionada, usar URL.createObjectURL para generar una URL temporal
@@ -345,7 +365,7 @@ function crearTarjetas(datosUsuario) {
       const botonDescartar = tarjeta.querySelector('.btn-descartar');
 
       botonContratar.addEventListener('click', () => {
-          alert(`Gracias por contratar. Atentamente tu asesor de seguros ${datosUsuario.nombre} ${datosUsuario.apellidos}`);
+          alert(`Gracias por contratar el seguro ${tipo}. Atentamente tu asesor de seguros ${datosUsuario.nombre} ${datosUsuario.apellidos}`);
       });
 
       botonDescartar.addEventListener('click', () => {
@@ -406,7 +426,7 @@ modeloSelect.addEventListener('change', () => {
         // Verificación si todos los campos son válidos
         const formIsValid = form.querySelectorAll('.is-invalid').length === 0; 
         // si algun input por lo que sea esté en rojo (is-invalid) nunca entrará al IF y nos mostrará que completemos los campos, lo mismo con el checkbox
-        console.log(datos);
+        // console.log(datos);
         if (formIsValid) {
             const checkboxTerminos = document.getElementById('terminos');
             
